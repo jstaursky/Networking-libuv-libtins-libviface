@@ -12,19 +12,19 @@ extern "C" void vnetwork_monitoring(uv_poll_t *handle, int status, int events);
 class VNetwork {
     friend void vnetwork_monitoring(uv_poll_t *, int, int);
 public:
-    class VNetworkIface;
 	VNetwork (std::string ip, std::string name);
 	~VNetwork();
 
-	void up ();
-	void setIPv4 (std::string);
+	void up ();                 // NOTE: up() MUST be run before using any of
+                                // the setup_* functions.
+	void set_ip (std::string);
 	void setup_sniffer (std::string ip, std::string name);
 	void setup_sniffer ();
 	void setup_sender ();
 	void attach (uv_loop_t* loop, void (*callback)(uv_poll_t*, int, int));
 
 private:
-	VNetworkIface* iface;
+    viface::VIface* iface;
 	Tins::BaseSniffer* sniffer;
 	Tins::PacketSender* sender;
 

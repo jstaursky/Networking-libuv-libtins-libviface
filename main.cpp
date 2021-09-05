@@ -24,10 +24,10 @@ int main (int argc, char *argv[])
 {
 	uv_loop_t* loop = uv_default_loop ();
 
-	VNetwork vn_device ("192.168.20.20", "viface%d");
+	VNetwork vn_device ("192.168.20.21", "viface%d");
+	vn_device.up ();
 	vn_device.setup_sniffer ();
 	vn_device.setup_sender ();
-	vn_device.up ();
 	// Attach listening activity to the event loop.
 	vn_device.attach (loop, vnetwork_monitoring);
 

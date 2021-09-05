@@ -1,21 +1,14 @@
 #include "async-networking.hpp"
 
 
-class VNetwork::VNetworkIface : public viface::VIface {
-public:
-    VNetworkIface(std::string ip, std::string name) : viface::VIface (name, false) {
-        setIPv4(ip);
-    }
-};
-
 VNetwork::VNetwork(std::string ip, std::string name)
 {
-    iface = new VNetworkIface (ip, name);
+    iface = new viface::VIface(name, true);
+    iface->setIPv4(ip);
 }
 
 VNetwork::~VNetwork()
 {
-	delete iface;
     delete sniffer;
     delete sender;
 }
@@ -27,7 +20,7 @@ void VNetwork::up ()
 	iface->up ();
 }
 
-void VNetwork::setIPv4 (std::string ip)
+void VNetwork::set_ip (std::string ip)
 {
 	iface->setIPv4 (ip);
 }
