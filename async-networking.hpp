@@ -15,21 +15,25 @@ public:
 	VNetwork (std::string ip, std::string name);
 	~VNetwork();
 
-	void up ();                 // NOTE: up() should be be run before using any
+	void up ();                 // NOTE: up() _should_ be be run before using any
                                 // of the setup_* functions.
 	void set_ip (std::string);
-	void setup_sniffer (std::string ip, std::string name);
-	void setup_sniffer ();
-	void setup_sender ();
-	void attach (uv_loop_t* loop, void (*c_callback)(uv_poll_t*, int, int));
 
-private:
-    viface::VIface* iface;
-	Tins::BaseSniffer* sniffer;
-	Tins::PacketSender* sender;
+    // Attach to event loop.
+	void attach_sniffer (uv_loop_t* loop, void (*c_callback)(uv_poll_t*, int, int));
+    void send_packet();
+    void reconfigure_sniffer(std::string ip, std::string name);
 
-	uv_poll_t vnet_poll_h;  // libuv handle
-	uv_poll_cb create_event_monitor ();
+  private:
+    // Default sniffer and sender configuring.
+    void setup_sniffer();
+    void setup_sender();
+
+    viface::VIface *iface;
+    Tins::BaseSniffer *sniffer;
+    Tins::PacketSender *sender;
+
+    uv_poll_t vnet_poll_h; // libuv handle
 };
 
 #endif /* ASYNC_NETWORKING_H */

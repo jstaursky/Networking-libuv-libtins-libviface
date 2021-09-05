@@ -26,10 +26,8 @@ int main (int argc, char *argv[])
 
 	VNetwork vn_device ("192.168.20.21", "viface%d");
 	vn_device.up ();
-	vn_device.setup_sniffer ();
-	vn_device.setup_sender ();
-	// Attach listener/sniffer activity to the event loop.
-	vn_device.attach (loop, vnetwork_monitoring);
+	// Attach sniffer monitoring to the event loop.
+	vn_device.attach_sniffer (loop, vnetwork_monitoring);
 
     uv_run(loop, UV_RUN_DEFAULT);
     uv_loop_close(loop);
