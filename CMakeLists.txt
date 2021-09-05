@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.1)
 project (Networking)
 
+set(CMAKE_BUILD_TYPE Debug)
+
 find_library (TINS_LIB NAMES tins)
 find_library (VIFACE_LIB NAMES viface)
 find_library (UV_LIB NAMES uv)

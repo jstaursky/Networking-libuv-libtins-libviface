@@ -7,30 +7,30 @@
 
 #include <iostream>
 
+extern "C" void vnetwork_monitoring(uv_poll_t *handle, int status, int events);
 
-
-class VNetwork
-{
-    using vnet_poll = uv_poll_t;
-
+class VNetwork {
+    friend void vnetwork_monitoring(uv_poll_t *, int, int);
 public:
-    VNetwork(std::string ip, std::string name);
-    ~VNetwork();
+    class VNetworkIface;
+	VNetwork (std::string ip, std::string name);
+	~VNetwork();
 
-    void up ();
-    void setIPv4 (std::string);
-    void setup_sniffer (std::string ip, std::string name);
-    void setup_sniffer ();
-    void set_sender ();
+	void up ();
+	void setIPv4 (std::string);
+	void setup_sniffer (std::string ip, std::string name);
+	void setup_sniffer ();
+	void setup_sender ();
+	void attach (uv_loop_t* loop, void (*callback)(uv_poll_t*, int, int));
 
 private:
-    viface::VIface* iface;
-    Tins::BaseSniffer* sniffer;
-    Tins::PacketSender* sender;
+	VNetworkIface* iface;
+	Tins::BaseSniffer* sniffer;
+	Tins::PacketSender* sender;
 
-    vnet_poll tun_poll;
+	uv_poll_t vnet_poll_h;  // libuv handle
+	uv_poll_cb create_event_monitor ();
 };
 
+#endif /* ASYNC_NETWORKING_H */
 
-
-#endif /* ASYNC-NETWORKING_H */
