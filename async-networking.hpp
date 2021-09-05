@@ -15,13 +15,13 @@ public:
 	VNetwork (std::string ip, std::string name);
 	~VNetwork();
 
-	void up ();                 // NOTE: up() MUST be run before using any of
-                                // the setup_* functions.
+	void up ();                 // NOTE: up() should be be run before using any
+                                // of the setup_* functions.
 	void set_ip (std::string);
 	void setup_sniffer (std::string ip, std::string name);
 	void setup_sniffer ();
 	void setup_sender ();
-	void attach (uv_loop_t* loop, void (*callback)(uv_poll_t*, int, int));
+	void attach (uv_loop_t* loop, void (*c_callback)(uv_poll_t*, int, int));
 
 private:
     viface::VIface* iface;

@@ -28,7 +28,7 @@ int main (int argc, char *argv[])
 	vn_device.up ();
 	vn_device.setup_sniffer ();
 	vn_device.setup_sender ();
-	// Attach listening activity to the event loop.
+	// Attach listener/sniffer activity to the event loop.
 	vn_device.attach (loop, vnetwork_monitoring);
 
     uv_run(loop, UV_RUN_DEFAULT);
