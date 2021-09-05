@@ -11,6 +11,7 @@ VNetwork::~VNetwork()
 {
     delete sniffer;
     delete sender;
+    delete iface;
 }
 
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
