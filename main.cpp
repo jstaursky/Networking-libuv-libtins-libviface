@@ -20,6 +20,13 @@ extern "C" void vnetwork_monitoring (uv_poll_t* handle, int status, int events)
     std::cout << std::endl;
 }
 
+extern "C" void send_message (uv_idle_t* handle)
+{
+  auto msg = (VNetwork*)uv_handle_get_data((uv_handle_t *)handle);
+  Tins::IP pkt = Tins::IP(msg->destination_ip) / Tins::TCP(22) / Tins::RawPDU(msg->message);
+  msg->send_message(&pkt);
+}
+
 int main (int argc, char *argv[])
 {
 	uv_loop_t* loop = uv_default_loop ();
@@ -29,6 +36,9 @@ int main (int argc, char *argv[])
 	// Attach sniffer monitoring to the event loop.
 	vn_device.attach_sniffer (loop, vnetwork_monitoring);
 
+    vn_device.message = "hello\n";
+    vn_device.destination_ip = "192.168.20.20";
+    vn_device.attach_sender(loop, send_message);
     uv_run(loop, UV_RUN_DEFAULT);
     uv_loop_close(loop);
 

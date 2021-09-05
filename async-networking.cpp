@@ -67,12 +67,19 @@ void VNetwork::reconfigure_sniffer (std::string ip, std::string iface_name)
 // NOTE: If an error occurs during polling then status < 0.
 void VNetwork::attach_sniffer (uv_loop_t* loop, void (*c_callback) (uv_poll_t* handle, int status, int events))
 {
-    uv_poll_init (loop, &vnet_poll_h, sniffer->get_fd ());
-    uv_handle_set_data ((uv_handle_t*)&vnet_poll_h, (void*) this);
-    uv_poll_start (&vnet_poll_h, UV_READABLE, c_callback);
+    uv_poll_init (loop, &vnet_rx_h, sniffer->get_fd ());
+    uv_handle_set_data ((uv_handle_t*)&vnet_rx_h, (void*) this);
+    uv_poll_start (&vnet_rx_h, UV_READABLE, c_callback);
 }
 
-void send_packet ()
+void VNetwork::attach_sender(uv_loop_t *loop, void (*c_callback)(uv_idle_t *handle))
 {
+    uv_idle_init(loop, &vnet_tx_h);
+    uv_handle_set_data((uv_handle_t*)&vnet_tx_h , (void *)this);
+    uv_idle_start(&vnet_tx_h, c_callback);
+}
 
+void VNetwork::send_message(Tins::PDU* pdu)
+{
+    sender->send(*pdu);
 }
