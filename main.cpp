@@ -2,7 +2,7 @@
 
 extern "C" void vnetwork_monitoring (uv_poll_t* handle, int status, int events)
 {
-    auto info = (VNetwork*)uv_handle_get_data((uv_handle_t*)handle);
+    auto info = (VNetwork*)uv_handle_get_data ((uv_handle_t*)handle);
 
     if (status == UV_EAGAIN)
         return;
@@ -22,25 +22,25 @@ extern "C" void vnetwork_monitoring (uv_poll_t* handle, int status, int events)
 
 extern "C" void send_message (uv_idle_t* handle)
 {
-  auto msg = (VNetwork*)uv_handle_get_data((uv_handle_t *)handle);
-  Tins::IP pkt = Tins::IP(msg->destination_ip) / Tins::TCP(22) / Tins::RawPDU(msg->message);
-  msg->send_message(&pkt);
+    auto msg = (VNetwork*)uv_handle_get_data ((uv_handle_t*)handle);
+    Tins::IP pkt = Tins::IP (msg->destination_ip) / Tins::RawPDU (msg->message);
+    msg->send_message (&pkt);
 }
 
-int main (int argc, char *argv[])
+int main (int argc, char* argv[])
 {
-	uv_loop_t* loop = uv_default_loop ();
+    uv_loop_t* loop = uv_default_loop ();
+    VNetwork vn_device ("192.168.20.21", "viface%d");
 
-	VNetwork vn_device ("192.168.20.21", "viface%d");
-	vn_device.up ();
-	// Attach sniffer monitoring to the event loop.
-	vn_device.attach_sniffer (loop, vnetwork_monitoring);
+    vn_device.up ();
+    // Attach sniffer monitoring to the event loop.
+    vn_device.attach_sniffer (loop, vnetwork_monitoring);
 
     vn_device.message = "hello\n";
     vn_device.destination_ip = "192.168.20.20";
-    vn_device.attach_sender(loop, send_message);
-    uv_run(loop, UV_RUN_DEFAULT);
-    uv_loop_close(loop);
+    vn_device.attach_sender (loop, send_message);
+    uv_run (loop, UV_RUN_DEFAULT);
+    uv_loop_close (loop);
 
-	return 0;
+    return 0;
 }

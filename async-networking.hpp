@@ -7,7 +7,7 @@
 #include <iostream>
 
 
-extern "C" void vnetwork_monitoring(uv_poll_t *handle, int status, int events);
+extern "C" void vnetwork_monitoring (uv_poll_t* handle, int status, int events);
 
 class VNetwork
 {
@@ -27,7 +27,7 @@ public:
     std::string message;
     std::string destination_ip;
 
-  private:
+private:
     // Default sniffer and sender configuring.
     void setup_sniffer();
     void setup_sender();
